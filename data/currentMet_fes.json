@@ -1,0 +1,41 @@
+{
+    "location": {
+        "name": "San Fernando",
+        "region": "San Fernando",
+        "country": "Spain",
+        "lat": 13.48,
+        "lon": -88.75,
+        "tz_id": "America/El_Salvador",
+        "localtime_epoch": 1718186067,
+        "localtime": "2024-06-12 3:54"
+    },
+    "current": {
+        "last_updated_epoch": 1718185500,
+        "last_updated": "2024-06-12 03:45",
+        "temp_c": 25.1,
+        "temp_f": 77.2,
+        "is_day": 0,
+        "condition": {
+            "text": "Moderate or heavy rain with thunder",
+            "icon": "//cdn.weatherapi.com/weather/64x64/night/389.png",
+            "code": 1276
+        },
+        "wind_mph": 2.2,
+        "wind_kph": 3.6,
+        "wind_degree": 31,
+        "wind_dir": "NNE",
+        "pressure_mb": 1010.0,
+        "pressure_in": 29.82,
+        "precip_mm": 0.01,
+        "precip_in": 0.0,
+        "humidity": 100,
+        "cloud": 75,
+        "feelslike_c": 28.3,
+        "feelslike_f": 82.9,
+        "vis_km": 6.0,
+        "vis_miles": 3.0,
+        "uv": 1.0,
+        "gust_mph": 6.2,
+        "gust_kph": 9.9
+    }
+}

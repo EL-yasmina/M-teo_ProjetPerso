@@ -1,0 +1,41 @@
+{
+    "location": {
+        "name": "Barcelona",
+        "region": "Catalonia",
+        "country": "Spain",
+        "lat": 41.38,
+        "lon": 2.18,
+        "tz_id": "Europe/Madrid",
+        "localtime_epoch": 1718186109,
+        "localtime": "2024-06-12 11:55"
+    },
+    "current": {
+        "last_updated_epoch": 1718185500,
+        "last_updated": "2024-06-12 11:45",
+        "temp_c": 20.1,
+        "temp_f": 68.2,
+        "is_day": 1,
+        "condition": {
+            "text": "Partly cloudy",
+            "icon": "//cdn.weatherapi.com/weather/64x64/day/116.png",
+            "code": 1003
+        },
+        "wind_mph": 4.3,
+        "wind_kph": 6.8,
+        "wind_degree": 190,
+        "wind_dir": "S",
+        "pressure_mb": 1017.0,
+        "pressure_in": 30.03,
+        "precip_mm": 0.0,
+        "precip_in": 0.0,
+        "humidity": 73,
+        "cloud": 75,
+        "feelslike_c": 20.1,
+        "feelslike_f": 68.2,
+        "vis_km": 10.0,
+        "vis_miles": 6.0,
+        "uv": 5.0,
+        "gust_mph": 11.9,
+        "gust_kph": 19.1
+    }
+}
