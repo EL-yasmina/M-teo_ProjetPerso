@@ -16,13 +16,3 @@ def get_recommandation(city: str):
         return {"city": city, "recommendation": recommendation}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
-
-@app.get("/weather/{city}")
-def get_weather(city: str):
-    try:
-        weather_data = get_weather_data(city)
-        if weather_data is None:
-            raise HTTPException(status_code=400, detail="Erreur : Impossible de récupérer les données météorologiques.")
-        return weather_data
-    except Exception as e:
-        raise HTTPException(status_code=500, detail=str(e))
