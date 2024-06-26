@@ -27,9 +27,6 @@ def recommandation_vetements(city):
     if response.status_code == 200:
         # Convertir la réponse en format JSON
         data = response.json()
-        
-
-
         # Extraire les informations pertinentes des données JSON
         temperature_celsius = data['current']['temp_c']
         condition = data['current']['condition']['text']
@@ -67,6 +64,8 @@ def recommandation_vetements(city):
     else:
         return None
         # Si la requête a échoué, retourner None
+
+
 def previsions_meteo(city, days):
     url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&days={days}"
     response = requests.get(url)
@@ -77,7 +76,8 @@ def previsions_meteo(city, days):
     else:
         return None
 
-def infos_ville(city):    
+
+def infos_ville(city):
     url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}"
     print("####  "+url)
     response = requests.get(url)
@@ -86,7 +86,8 @@ def infos_ville(city):
         return data['location']
     else:
         return None
-    
+
+
 def qualite_air(city):
     url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}&aqi=yes"
     response = requests.get(url)
