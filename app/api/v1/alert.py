@@ -1,29 +1,18 @@
 import requests
-import json
 import os
-# import tkinter as tk
-# from tkinter import simpledialog
+from dotenv import load_dotenv
 
-api_key = "c505f918cd1244f9a5d132545241206"
+# Charger les variables d'environnement depuis le fichier .env
+load_dotenv()
 
-def sauvegarder_donneesCurrent_json(donnees, nom_fichier, dossier):
-    """
-    Sauvegarde les données dans un fichier JSON.
+# Obtenir la clé API depuis les variables d'environnement
+api_key = os.getenv("api_key")
 
-    Args:
-        donnees (dict): Les données à sauvegarder.
-        nom_fichier (str): Le nom du fichier JSON de sortie.
-        dossier (str): Le dossier où sauvegarder le fichier.
-    """
-    os.makedirs(dossier, exist_ok=True)  # Créer le dossier s'il n'existe pas
-    chemin = os.path.join(dossier, nom_fichier)
-    with open(chemin, "w") as json_file:
-        json.dump(donnees, json_file, indent=4)
 
 def recommandation_vetements(city):
     """
-    Donne une recommandation de vêtements en fonction des conditions météorologiques.
-
+    Donne une recommandation de vêtements en fonction des conditions
+    météorologiques.
     Args:
         city (str): Le nom de la ville pour laquelle obtenir la recommandation.
 
@@ -38,48 +27,84 @@ def recommandation_vetements(city):
     if response.status_code == 200:
         # Convertir la réponse en format JSON
         data = response.json()
+        
 
-        # Sauvegarder les données météorologiques actuelles dans un fichier JSON
-        sauvegarder_donneesCurrent_json(data, "currentMet_"+city+".json", "data")
 
         # Extraire les informations pertinentes des données JSON
         temperature_celsius = data['current']['temp_c']
         condition = data['current']['condition']['text']
         precipitation_mm = data['current']['precip_mm']
 
-        # Déterminer la recommandation de vêtements en fonction de la température et des conditions météorologiques
+        # Déterminer la recommandation de vêt en fonction de la tempér et des conditions météo
         if temperature_celsius < 10:
-            return f"Il fait plutôt frais à {data['location']['name']} avec {temperature_celsius}°C. Tu devrais peut-être envisager de porter quelque chose de chaud !"
+            return (
+                "Il fait plutôt frais à {} avec {}°C. Tu devrais peut-être envisager de "
+                "porter quelque chose de chaud !".format(data['location']['name'], temperature_celsius)
+            )
         elif 10 <= temperature_celsius < 20:
             if precipitation_mm > 0:
-                return f"Il y a {condition} à {data['location']['name']} et il fait {temperature_celsius}°C. Prends un parapluie et peut-être un pull léger !"
+                return (
+                    "Il y a {} à {} et il fait {}°C. Prends un parapluie et peut-être un "
+                    "pull léger !".format(condition, data['location']['name'], temperature_celsius)
+                )
             else:
-                return f"À {data['location']['name']} il fait {temperature_celsius}°C, un t-shirt et une veste légère pourraient être parfaits pour toi !"
+                return (
+                    "À {} il fait {}°C, un t-shirt et une veste légère pourraient être parfaits "
+                    "pour toi !".format(data['location']['name'], temperature_celsius)
+                )
         else:
             if precipitation_mm > 0:
-                return f"Il pleut à {data['location']['name']} et il fait {temperature_celsius}°C. N'oublie pas ton parapluie !"
+                return (
+                    "Il pleut à {} et il fait {}°C. N'oublie pas ton parapluie !".format(
+                        data['location']['name'], temperature_celsius
+                    )
+                )
             else:
-                return f"Il fait chaud à {data['location']['name']} avec {temperature_celsius}°C. C'est le moment de sortir les shorts et les lunettes de soleil !"
+                return (
+                    "Il fait chaud à {} avec {}°C. C'est le moment de sortir les shorts et "
+                    "les lunettes de soleil !".format(data['location']['name'], temperature_celsius)
+                )
+    else:
+        return None
+        # Si la requête a échoué, retourner None
+def previsions_meteo(city, days):
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&days={days}"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+
+        return data['forecast']['forecastday']
     else:
         return None
 
-# Commenter la partie Tkinter pour se concentrer sur FastAPI
-# Création de la fenêtre principale
-# root = tk.Tk()
-# Masquer la fenêtre principale
-# root.withdraw()  
+def infos_ville(city):    
+    url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}"
+    print("####  "+url)
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return data['location']
+    else:
+        return None
+    
+def qualite_air(city):
+    url = f"http://api.weatherapi.com/v1/current.json?key={api_key}&q={city}&aqi=yes"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        if 'current' in data and 'air_quality' in data['current']:
+            return data['current']['air_quality']
+        else:
+            return None
+    else:
+        return None
 
-# Afficher une boîte de dialogue avec un champ de saisie
-# user_input = simpledialog.askstring("Meteo ville", "Entrez votre ville ici :")
 
-# message = recommandation_vetements(user_input)
-
-# Afficher le texte saisi
-# if message is not None:
-#     tk.messagebox.showinfo("Information", message)
-
-# else:
-#     tk.messagebox.showinfo("Information", "Vous êtes sûr que c'est la bonne ville !")
-
-# Fermer la fenêtre
-# root.destroy()
+def previsions_horaires(city):
+    url = f"http://api.weatherapi.com/v1/forecast.json?key={api_key}&q={city}&hours=24"
+    response = requests.get(url)
+    if response.status_code == 200:
+        data = response.json()
+        return data['forecast']['forecastday'][0]['hour']
+    else:
+        return None
