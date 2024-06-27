@@ -1,74 +1,37 @@
+# This config was automatically generated from your source code
+# Stacks detected: deps:python:.
 version: 2.1
-
+orbs:
+  python: circleci/python@2
 jobs:
-  test:
+  test-python:
+    # Install dependencies and run tests
     docker:
-      - image: cimg/python:3.9  # Utiliser une image Docker avec Python
+      - image: cimg/python:3.8-node
     steps:
       - checkout
+      - python/install-packages
       - run:
-          name: Install dependencies
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-            pip install pytest pytest-mock
+          name: Install dependences tests
+          command: pip install pytest pytest-mock requests-mock
       - run:
           name: Run tests
-          command: |
-            . venv/bin/activate
-            pytest
-      - run:
-          name: Check code quality
-          command: |
-            . venv/bin/activate
-            pip install flake8 flake8-html
-            flake8 --format=html --htmldir=flake8-report
-      - store_artifacts:
-          path: flake8-report
-          destination: flake8-report
-
-  build:
-    docker:
-      - image: cimg/python:3.9
-    steps:
-      - checkout
-      - run:
-          name: Install dependencies
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install -r requirements.txt
-      - run:
-          name: Build artifact
-          command: |
-            . venv/bin/activate
-            # Commandes pour construire l'artefact de votre application, par exemple:
-            # pyinstaller --onefile app.py
-            touch example.txt
-      - store_artifacts:
-          path: example.txt
-
+          command: pytest --junitxml=junit.xml || ((($? == 5)) && echo 'Did not find any tests to run.')
+      - store_test_results:
+          path: junit.xml
   deploy:
+    # This is an example deploy job, not actually used by the workflow
     docker:
-      - image: cimg/python:3.9
+      - image: cimg/base:stable
     steps:
-      - checkout
+      # Replace this with steps to deploy to users
       - run:
-          name: Deploy application
-          command: |
-            # Commandes pour déployer votre application, par exemple:
-            # scp example.txt user@yourserver:/path/to/deploy/
-            echo "Déploiement de l'application"
-
+          name: deploy
+          command: '#e.g. ./deploy.sh'
 workflows:
-  version: 2
-  example:
+  build-and-test:
     jobs:
-      - test
-      - build:
-          requires:
-            - test
-      - deploy:
-          requires:
-            - build
+      - test-python
+    # - deploy:
+    #     requires:
+    #       - test-python
