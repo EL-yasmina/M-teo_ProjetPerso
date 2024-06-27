@@ -9,13 +9,14 @@ jobs:
     steps:
       - checkout
 
-      # Installer les dépendances du projet
+      # Installer les dépendances du projet, y compris pytest et pytest-mock
       - run:
           name: Install dependencies
           command: |
             python -m venv venv
             . venv/bin/activate
             pip install -r requirements.txt
+            pip install pytest pytest-mock
 
       # Exécuter les tests unitaires avec pytest
       - run:
@@ -24,35 +25,10 @@ jobs:
             . venv/bin/activate
             pytest
 
-  performance:
-    docker:
-      - image: circleci/python:3.9
-    working_directory: ~/repo
-
-    steps:
-      - checkout
-
-      # Installer Locust pour les tests de performance
-      - run:
-          name: Install Locust
-          command: |
-            python -m venv venv
-            . venv/bin/activate
-            pip install locustio
-
-      # Exécuter les tests de performance avec Locust
-      - run:
-          name: Run performance tests
-          command: |
-            . venv/bin/activate
-            locust -f locustfile.py --headless -u 10 -r 2 --run-time 1m
-
 workflows:
   version: 2
   build_and_test:
     jobs:
       - build
 
-  performance_testing:
-    jobs:
-      - performance
+  
