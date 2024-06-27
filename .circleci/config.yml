@@ -19,15 +19,16 @@ jobs:
     # Add steps to the job
     # See: https://circleci.com/docs/jobs-steps/#steps-overview & https://circleci.com/docs/configuration-reference/#steps
     steps:
-      - run:
-          name: install tests
-          command: pip install pytest pytest-mock
+      
       # Checkout the code as the first step.
       - checkout
       # Replace this with a real test runner invocation
       - run:
           name: Run tests
           command: echo 'replace me with real tests!' && false
+      - run:
+          name: install tests
+          command: pip install pytest pytest-mock
   build:
     docker:
       - image: cimg/base:current
