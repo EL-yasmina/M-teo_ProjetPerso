@@ -2,7 +2,7 @@ fastapi==0.111.0
 gradio==4.37.1
 locustio==0.999
 pytest==8.2.0
-pytest==8.2.2
+
 python-dotenv==1.0.1
 Requests==2.32.3
 selenium==4.22.0
